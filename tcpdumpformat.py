@@ -21,6 +21,7 @@ import sys
 
 HEX = "0123456789abcdef"
 SKIP_EMPTY = True
+LINE_COUNT = 32
 
 def hex2byte(hexstr):
     assert len(hexstr) == 2
@@ -91,11 +92,13 @@ class Conf:
             n = 0
             if body or not SKIP_EMPTY:
                 print self.title
-            for idx in range(0, len(body), 16):
-                sec = body[idx:idx+16]
+
+            fmt = "  0x%04x: %-" + str(LINE_COUNT * 3 + 2) + "s %s"
+            for idx in range(0, len(body), LINE_COUNT):
+                sec = body[idx:idx+LINE_COUNT]
                 left = " ".join([byte2hex(i) for i in sec])
                 right = printhex(sec)
-                print "  0x%04x: %-50s %s" % (n * 16, left, right)
+                print fmt % (n * LINE_COUNT, left, right)
                 n += 1
 
             if body or not SKIP_EMPTY:
